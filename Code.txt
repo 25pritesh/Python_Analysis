@@ -1,0 +1,56 @@
+"""
+Created on Tue Jan  9 09:42:19 2018
+
+@author: pritespa
+"""
+#importing data using numpy
+import matplotlib.pyplot as plt
+import numpy as np
+data = np.genfromtxt('faithful.csv',dtype='float', delimiter=',',skip_header=1)
+
+#plotting graph for 1st and 2nd coloumn values
+plt.figure()
+plt.plot(data[:,1], data[:,2], '.b', label='Observations')
+
+#labeling the X Axis
+plt.xlabel('Eruption Duration (MiNUTES)')
+
+#labeling the Y Axis
+plt.ylabel('Time Duration (MINUTES)')
+
+# Limiting the Y Axis
+plt.ylim([0,100])
+
+#choosing the best look for Observations
+plt.legend(loc='best')
+
+#finding the mean eruption duration
+duration_mean = np.mean(data[:,1])
+
+#finding the waiting time
+wait_mean = np.mean(data[:,2])
+
+#finding the std deviation
+duration_std = np.std(data[:,1])
+wait_std = np.std(data[:,2])
+
+#plotting the error graph
+plt.errorbar(duration_mean,wait_mean, fmt='xr',
+             xerr=duration_std,yerr=wait_std, label='Descriptive Statistics')
+plt.legend(loc='best')
+
+#finding the coeffiecnt using polynomial function 
+coeff = np.polyfit(data[:,1], data[:,2],1)
+
+#linear Regressions
+plot_x = np.array([1.5,5.5])
+#linear space
+#plot_x = np.linspace([1.5,5.5])
+plot_y = coeff[0] * plot_x + coeff[1]
+plt.plot(plot_x,plot_y,':r',label='Regular Regression')
+plt.legend(loc='best')
+
+#cooricail coefficeint
+r_matrix = np.corrcoef(data[:,1], data[:,2])
+r_value = r_matrix[0][1]
+r_squared = r_value **2
